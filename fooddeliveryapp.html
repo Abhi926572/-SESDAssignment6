@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Food Delivery — Creational Patterns Demo</title>
+  <style>
+    :root{ 
+    --bg:#0f1724; 
+    --card:#0b1120; 
+    --accent:#06b6d4; 
+    --muted:#94a3b8; 
+    --glass: rgba(255,255,255,0.03); }
+    *{
+    box-sizing:border-box;
+    font-family:Inter,system-ui,Arial,Helvetica,sans-serif
+    }
+    body{
+    margin:0;
+    background:linear-gradient(180deg,#071028, #081428);
+    color:#e6eef6;
+    min-height:100vh;
+    padding:28px
+    }
+    .container
+    {
+    max-width:1100px;
+    margin:0 auto
+    }
+    header
+    {
+    display:flex;
+    align-items:center;
+    gap:16px;
+    margin-bottom:18px
+    }
+    h1
+    {
+    font-size:20px;
+    margin:0
+    }
+    .grid
+    {
+    display:grid;
+    grid-template-columns:1fr 360px;
+    gap:18px
+    }
+    .card
+    {
+    background:var(--card);
+    padding:14px;
+    border-radius:12px;
+    box-shadow:0 6px 18px rgba(2,6,23,0.6);
+    }
+    .muted{color:var(--muted);font-size:13px}
+    label{display:block;font-size:13px;margin-top:8px}
+    input,select,button,textarea{width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);background:var(--glass);color:inherit}
+    button{cursor:pointer;border:none;padding:10px;border-radius:10px;background:linear-gradient(90deg,var(--accent),#7dd3fc);color:#032; font-weight:600}
+    .row{display:flex;gap:10px}
+    .list{max-height:320px;overflow:auto;margin-top:10px}
+    .item{padding:8px;border-radius:8px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));margin-bottom:8px}
+    .small{font-size:13px}
+    .k{color:#7dd3fc;font-weight:700}
+    footer{margin-top:18px;color:var(--muted);font-size:13px}
+    .controls{display:flex;gap:8px;margin-top:8px}
+    .pay-opt{display:flex;gap:6px;align-items:center}
+    .badge{background:rgba(255,255,255,0.04);padding:6px;border-radius:8px;font-size:13px}
+  </style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div style="width:48px;height:48px;border-radius:10px;background:linear-gradient(90deg,var(--accent),#7dd3fc)"></div>
+    <div>
+      <h1>Food Delivery — Creational Patterns Demo</h1>
+      <div class="muted">Implements Singleton, Factory Method, Abstract Factory, Builder, Prototype — HTML/CSS/JS</div>
+    </div>
+  </header>
+
+  <div class="grid">
+    <!-- MAIN: App Simulation -->
+    <div>
+      <div class="card">
+        <h3>1) Create Users / Restaurants (Factory Method)</h3>
+        <div class="row">
+          <div style="flex:1">
+            <label>Name</label>
+            <input id="inpName" placeholder="e.g. Abhishek / Spicy Biryani" />
+            <label>Type</label>
+            <select id="selType">
+              <option value="customer">Customer</option>
+              <option value="deliverypartner">Delivery Partner</option>
+              <option value="restaurant">Restaurant</option>
+            </select>
+            <label class="muted small">For Restaurants: provide menu items later</label>
+            <div class="controls">
+              <button id="btnCreateUser">Create</button>
+              <button id="btnListUsers">Show All</button>
+            </div>
+          </div>
+          <div style="width:220px">
+            <label>ID (optional)</label>
+            <input id="inpId" placeholder="leave blank to auto" />
+            <label class="muted small">Quick actions</label>
+            <div class="controls">
+              <button id="btnCloneMenu">Clone Menu Item (Prototype)</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:12px">
+        <h3>2) Restaurants & Menu</h3>
+        <div class="row">
+          <div style="flex:1">
+            <label>Select Restaurant</label>
+            <select id="selRestaurant"></select>
+            <label>Menu Item Name</label>
+            <input id="inpMenuName" placeholder="e.g. Chicken Biryani" />
+            <label>Price (₹)</label>
+            <input id="inpMenuPrice" type="number" value="199" />
+            <label>Tags (comma separated)</label>
+            <input id="inpMenuTags" placeholder="Biryani,Spicy" />
+            <div class="controls">
+              <button id="btnAddMenu">Add Menu Item</button>
+              <button id="btnShowMenu">Show Menu</button>
+            </div>
+          </div>
+          <div style="width:220px">
+            <div class="badge">Tip: use Factory to create users, Prototype to clone menu items</div>
+            <div style="height:8px"></div>
+            <div class="muted small">Click a menu item's "Add" to add to Cart (Singleton Cart)</div>
+          </div>
+        </div>
+        <div class="list" id="menuList"></div>
+      </div>
+
+      <div class="card" style="margin-top:12px">
+        <h3>3) Cart (Singleton) & Order Builder</h3>
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <div style="flex:1">
+            <div class="row">
+              <button id="btnViewCart">View Cart</button>
+              <button id="btnClearCart">Clear Cart</button>
+              <button id="btnBuildOrder">Build Order (Builder)</button>
+            </div>
+            <div id="cartView" class="list" style="margin-top:10px"></div>
+          </div>
+          <div style="width:260px">
+            <h4>Checkout</h4>
+            <label>Payment Method</label>
+            <select id="selPayment">
+              <option value="upi">UPI</option>
+              <option value="wallet">Wallet</option>
+              <option value="cod">Cash on Delivery</option>
+            </select>
+            <div style="height:8px"></div>
+            <button id="btnCheckout">Checkout (Abstract Factory)</button>
+            <div id="checkoutResult" class="muted small" style="margin-top:8px"></div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="muted">You can deploy this single HTML file to GitHub Pages (push to main and enable Pages for root).</div>
+      </footer>
+    </div>
+
+    <!-- SIDE: Info & Logs -->
+    <aside>
+      <div class="card">
+        <h3>Logs</h3>
+        <div id="log" class="list" style="height:380px"></div>
+        <div style="margin-top:8px"><button id="btnClearLog">Clear Logs</button></div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<script>
+/* ==========================================
+   Creational Patterns Implementation (Food Delivery)
+   - Factory Method: UserFactory -> Customer, DeliveryPartner, Restaurant
+   - Singleton: Cart (single global cart instance)
+   - Abstract Factory: PaymentFactory -> UPI/Wallet/COD
+   - Builder: OrderBuilder -> builds order object with options
+   - Prototype: MenuItemPrototype -> clone menu items quickly
+   ========================================== */
+
+// --- Utility
+const $ = id => document.getElementById(id);
+const logEl = $('log');
+function log(msg){ const d = document.createElement('div'); d.className='item'; d.textContent = '['+new Date().toLocaleTimeString()+'] '+msg; logEl.prepend(d); }
+
+// --- 1) FACTORY METHOD: Users
+class User{ constructor({id,name,role}){ this.id = id; this.name = name; this.role = role; } info(){return `${this.role}: ${this.name} (ID:${this.id})`} }
+class Customer extends User{ constructor(props){ super({...props, role:'Customer'}); this.orders=[];} placeOrder(o){this.orders.push(o); return `Order placed: ${o.id}`} }
+class DeliveryPartner extends User{ constructor(props){ super({...props, role:'Delivery Partner'}); this.deliveries=[];} assign(d){this.deliveries.push(d); return `Assigned ${d.id}` } }
+class Restaurant extends User{ constructor(props){ super({...props, role:'Restaurant'}); this.menu = props.menu || []; } addMenuItem(item){ this.menu.push(item); } }
+
+class UserFactory{ static _idGen=100; static createUser(type, props){ const id = props.id || (UserFactory._idGen++);
+  switch((type||'').toLowerCase()){ case 'customer': return new Customer({...props,id}); case 'deliverypartner': return new DeliveryPartner({...props,id}); case 'restaurant': return new Restaurant({...props,id}); default: throw new Error('Unknown user type '+type); } }}
+
+// --- 2) SINGLETON: Cart
+class Cart {
+  constructor(){ if(Cart._instance) return Cart._instance; this.items = []; Cart._instance = this; }
+  add(item, qty=1){ const found = this.items.find(i=>i.item.id===item.id); if(found) found.qty += qty; else this.items.push({item,qty}); }
+  remove(id){ this.items = this.items.filter(i=>i.item.id!==id); }
+  clear(){ this.items = []; }
+  total(){ return this.items.reduce((s,i)=>s + i.item.price * i.qty, 0); }
+  count(){ return this.items.reduce((s,i)=>s + i.qty, 0); }
+}
+
+// --- 3) PROTOTYPE: MenuItemPrototype
+class MenuItem { constructor({id,name,price,tags=[]}){ this.id = id; this.name = name; this.price = price; this.tags = tags; } info(){ return `${this.name} — ₹${this.price}` } }
+class MenuItemPrototype{ constructor(menuItem){ this.proto = menuItem; }
+  clone(changes={}){
+    const cloned = JSON.parse(JSON.stringify(this.proto));
+    const newObj = { id: changes.id || (cloned.id + '_cp_' + Date.now()), name: changes.name || cloned.name, price: changes.price ?? cloned.price, tags: (changes.tags || cloned.tags) };
+    return new MenuItem(newObj);
+  }
+}
+
+// --- 4) BUILDER: OrderBuilder (builds complex order objects)
+class OrderBuilder{
+  constructor(){ this.order = { id: 'ORD_' + Date.now(), items: [], customer: null, restaurant: null, notes: '', etaEstimate: null } }
+  setCustomer(c){ this.order.customer = c; return this }
+  setRestaurant(r){ this.order.restaurant = r; return this }
+  addItem(item, qty=1){ this.order.items.push({item,qty}); return this }
+  notes(txt){ this.order.notes = txt; return this }
+  eta(minutes){ this.order.etaEstimate = minutes; return this }
+  build(){ // simple validation
+    if(!this.order.customer) throw new Error('Customer missing');
+    if(!this.order.restaurant) throw new Error('Restaurant missing');
+    if(this.order.items.length===0) throw new Error('No items');
+    return this.order;
+  }
+}
+
+// --- 5) ABSTRACT FACTORY: PaymentFactory
+class UPI { constructor(){ this.name='UPI' } pay(order, amount){ return `Paid ₹${amount} via UPI for ${order.id}` } }
+class Wallet { constructor(){ this.name='Wallet' } pay(order, amount){ return `Paid ₹${amount} from Wallet for ${order.id}` } }
+class COD { constructor(){ this.name='Cash on Delivery' } pay(order, amount){ return `Order ${order.id} placed with Cash on Delivery (₹${amount})` } }
+
+class PaymentFactory{ static create(method){ switch((method||'').toLowerCase()){ case 'upi': return new UPI(); case 'wallet': return new Wallet(); case 'cod': return new COD(); default: throw new Error('Unknown payment '+method); } } }
+
+// ----------------- App State (simple memory) -----------------
+const DB = { users: [], restaurants: [] };
+const cart = new Cart(); // Singleton instance
+
+// -------------- UI wiring -----------------
+function refreshRestaurantSelect(){ const sel = $('selRestaurant'); sel.innerHTML=''; const rest = DB.users.filter(u=>u.role==='Restaurant'); rest.forEach(r=>{ const o = document.createElement('option'); o.value = r.id; o.textContent = `${r.name} (ID:${r.id})`; sel.appendChild(o); }); if(!sel.children.length){ const o = document.createElement('option'); o.textContent='-- no restaurants --'; sel.appendChild(o); } }
+function renderMenu(){ const sel = $('selRestaurant'); const v = sel.value; const list = $('menuList'); list.innerHTML=''; const r = DB.users.find(u=>String(u.id)===String(v)); if(!r){ list.innerHTML='<div class="muted small">Select a restaurant to see menu.</div>'; return; }
+  r.menu.forEach(mi=>{
+    const d = document.createElement('div'); d.className='item';
+    d.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center"><div><strong>${mi.name}</strong><div class='small muted'>₹${mi.price} · ${mi.tags.join(', ')}</div></div><div style='display:flex;gap:8px'><button data-id='${mi.id}' class='btnAdd'>Add</button><button data-id='${mi.id}' class='btnClone'>Clone</button></div></div>`;
+    list.appendChild(d);
+  });
+}
+
+// Event handlers
+$('btnCreateUser').onclick = ()=>{
+  const name = $('inpName').value.trim(); const type = $('selType').value; if(!name){ alert('Enter a name'); return; }
+  try{
+    const u = UserFactory.createUser(type, { name, id: $('inpId').value || undefined });
+    DB.users.push(u); if(type==='restaurant') DB.restaurants = DB.restaurants || [];
+    log('Created user: '+u.info()); refreshRestaurantSelect();
+  }catch(e){ alert(e.message) }
+}
+$('btnListUsers').onclick = ()=>{ const s = DB.users.map(u=>u.info()).join('\n'); alert(s || 'No users yet'); }
+
+$('btnAddMenu').onclick = ()=>{
+  const sel = $('selRestaurant'); const rid = sel.value; const r = DB.users.find(u=>String(u.id)===String(rid)); if(!r){ alert('Select a restaurant'); return; }
+  const name = $('inpMenuName').value.trim(); const price = Number($('inpMenuPrice').value) || 0; const tags = $('inpMenuTags').value.split(',').map(s=>s.trim()).filter(Boolean);
+  if(!name){ alert('Menu name'); return; }
+  const mid = 'M_' + Math.random().toString(36).slice(2,8);
+  const mi = new MenuItem({ id: mid, name, price, tags });
+  r.addMenuItem(mi);
+  log(`Added menu item ${mi.name} to ${r.name}`);
+  renderMenu();
+}
+
+// Add to cart or clone
+document.addEventListener('click', (e)=>{
+  if(e.target.classList.contains('btnAdd')){
+    const id = e.target.getAttribute('data-id'); const sel = $('selRestaurant'); const r = DB.users.find(u=>String(u.id)===String(sel.value)); const mi = r.menu.find(m=>m.id===id); cart.add(mi,1); log('Added to cart: '+mi.name); $('cartView').innerHTML = `Items: ${cart.count()} · Total: ₹${cart.total()}`;
+  }
+  if(e.target.classList.contains('btnClone')){
+    const id = e.target.getAttribute('data-id'); const sel = $('selRestaurant'); const r = DB.users.find(u=>String(u.id)===String(sel.value)); const mi = r.menu.find(m=>m.id===id);
+    const proto = new MenuItemPrototype(mi); const cloned = proto.clone({ name: mi.name + ' (Clone)' }); r.addMenuItem(cloned); log('Cloned menu item: '+cloned.name); renderMenu();
+  }
+});
+
+$('btnShowMenu').onclick = renderMenu;
+$('btnViewCart').onclick = ()=>{ const cv = $('cartView'); if(cart.items.length===0) cv.innerHTML = '<div class="muted small">Cart empty</div>'; else cv.innerHTML = cart.items.map(i=>`<div class='item'>${i.item.name} — ₹${i.item.price} × ${i.qty}</div>`).join('') + `<div class='item'><strong>Total: ₹${cart.total()}</strong></div>`; }
+$('btnClearCart').onclick = ()=>{ cart.clear(); $('cartView').innerHTML=''; log('Cleared cart'); }
+
+// Order builder
+$('btnBuildOrder').onclick = ()=>{
+  try{
+    const sel = $('selRestaurant'); const r = DB.users.find(u=>String(u.id)===String(sel.value)); if(!r) throw new Error('Choose restaurant');
+    const cust = DB.users.find(u=>u.role==='Customer'); if(!cust) throw new Error('No customer exists (create one)');
+    const ob = new OrderBuilder(); ob.setCustomer(cust).setRestaurant(r);
+    cart.items.forEach(it=> ob.addItem(it.item, it.qty)); ob.notes('Built from demo UI'); ob.eta(30);
+    const order = ob.build(); log('Built order ' + order.id + ' with '+order.items.length+' items'); alert('Order built: '+order.id);
+  }catch(e){ alert(e.message); }
+}
+
+$('btnCheckout').onclick = ()=>{
+  try{
+    if(cart.items.length===0) { alert('Cart empty'); return; }
+    const method = $('selPayment').value; const pay = PaymentFactory.create(method);
+    const fakeOrder = { id: 'F_' + Date.now() }; const amount = cart.total(); const res = pay.pay(fakeOrder, amount);
+    $('checkoutResult').textContent = res; log('Checkout: '+res); if(method==='cod') cart.clear();
+  }catch(e){ alert(e.message); }
+}
+
+// Clone menu via top button (prototype global)
+$('btnCloneMenu').onclick = ()=>{
+  // find first restaurant & first menu item
+  const r = DB.users.find(u=>u.role==='Restaurant'); if(!r || r.menu.length===0){ alert('Need a restaurant with menu to clone'); return; }
+  const proto = new MenuItemPrototype(r.menu[0]); const cloned = proto.clone({ name: r.menu[0].name + ' (Global Clone)' }); r.addMenuItem(cloned); log('Prototype: cloned '+cloned.name+' into '+r.name); renderMenu();
+}
+
+// Logging
+$('btnClearLog').onclick = ()=>{ logEl.innerHTML=''; }
+
+// initial demo data
+(function seed(){ const c = UserFactory.createUser('customer',{name:'Abhishek'}); const p = UserFactory.createUser('deliverypartner',{name:'Rahul'});
+  const r = UserFactory.createUser('restaurant',{name:'Spicy Biryani House'});
+  r.addMenuItem(new MenuItem({ id:'m1', name:'Chicken Biryani', price:249, tags:['Biryani','Spicy'] }));
+  r.addMenuItem(new MenuItem({ id:'m2', name:'Paneer Butter Masala', price:199, tags:['Veg'] }));
+  DB.users.push(c,p,r);
+  refreshRestaurantSelect(); renderMenu(); log('Seeded demo data — customer, partner, restaurant with 2 items');
+})();
+
+</script>
+</body>
+</html>
